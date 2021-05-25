@@ -1,3 +1,32 @@
+
+function doThis(){
+    let find_mp = document.getElementById("find-mp");
+    let postalCode = find_mp.value;
+    console.log(`https://represent.opennorth.ca/postcodes/${postalCode}/`);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", `https://represent.opennorth.ca/postcodes/${postalCode}/`, false);
+    xmlHttp.send();
+    let list = (JSON.parse(xmlHttp.responseText)).representatives_centroid;
+    for (i = 0; i < list.length; i++){
+        if (list[i].elected_office === "MP") {
+            let name = list[i].name;
+            let email = list[i].email;
+            let image = list[i].photo_url;
+            let party = list[i].party_name;
+            $("#your-mp").html(`<img src="${image}">
+            <p> 
+            <ul style="list-style-type:none; list-style-position:inside; margin-left:-35px"> 
+            <li> Name: ${name} </li>
+            <li> E-mail: ${email} </li>
+            <li> Party: ${party}  </li>
+            </ul>
+            </p>`);  
+            $("#user-input").val(name);
+            break;
+        }
+    };
+  };
+
 d3.csv("https://raw.githubusercontent.com/TasniaHussain/MPP/main/movies.csv").then(function (data, event) {
 //d3.csv("movies.csv").then(function (data, event) {
 var movies = data;
@@ -64,35 +93,10 @@ for (var i = 0; i < filteredMovies.length; i++) { //outer
     else {//second
         d3.select("tbody").insert("tr").html( 
         "<td>" + [i+1] + "</td>"+
-        '<td style="color:white; background-color: green; font-size: 14pt; font-weight: bold">' + (output[i]['original_title'])+"</td>" + 
-        '<td > <a href="' + (output[i]['Source']) + '">' + 
-(output[i]['Source']) +"</a>");  
-
-
+        '<td style="color:white; background-color: green; font-size: 14pt; font-weight: bold"> <a href="' + (output[i]['Source']) + '">' + "<u>" + (output[i]['original_title'])+ "</u> </a>");
     //second end}
 }
 }
 }
 }
 )
-
-function doThis(){
-    let find_mp = document.getElementById("find-mp");
-    let postalCode = find_mp.value;
-    console.log(`https://represent.opennorth.ca/postcodes/${postalCode}/`);
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", `https://represent.opennorth.ca/postcodes/${postalCode}/`, false);
-    xmlHttp.send();
-    let list = (JSON.parse(xmlHttp.responseText)).representatives_centroid;
-    for (i = 0; i < list.length; i++){
-        if (list[i].elected_office === "MP") {
-            let name = list[i].name;
-            let email = list[i].email;
-            let image = list[i].photo_url;
-            let party = list[i].party_name;
-            $("#your-mp").html(`<img src="${image}">
-            <p> Name: ${name}, E-mail: ${email}, Party: ${party} </p>`);  
-            break;
-        }
-    };
-  };
